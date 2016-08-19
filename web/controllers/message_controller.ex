@@ -6,7 +6,9 @@ defmodule Docs.MessageController do
   plug :find_document
 
   def index(conn, _params) do
-    messages = Repo.all(Message)
+    document = conn.assigns.document
+    messages = Repo.all(from _ in assoc(document, :messages),
+      preload: [:document])
     render(conn, "index.html", messages: messages)
   end
 
